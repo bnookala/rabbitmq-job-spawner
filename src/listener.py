@@ -40,14 +40,14 @@ class Listener(object):
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue=os.environ['QUEUE'])
 
-
-    # Callback to pretend to do work.
+    # Spawns a job based on the queue.
     def callback(self, ch, method, properties, body):
         try:
-            message_obj = json.loads(body)
+            payload = str(body, 'utf-8')
+            message_obj = json.loads(payload)
         except Exception:
+            print("Queue object could not be loaded: ")
             print(body)
-            print("Queue object could not be read")
             return
 
         encoding_type = message_obj.get('encoding_type')

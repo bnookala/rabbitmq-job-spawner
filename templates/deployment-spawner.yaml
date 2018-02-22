@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
   name: {{ template "..fullname" . }}
@@ -10,11 +10,11 @@ spec:
   template:
     metadata:
       labels:
-        app: {{ template "..name" . }}
+        app: rabbitmq-listener
     spec:
       containers:
         - name: listener
-          image: "{{ .Values.listener.image.repository }}"
+          image: {{ .Values.listener.image.repository }}
           imagePullPolicy: {{ .Values.listener.image.pullPolicy }}
           env:
             - name: RABBIT_URL
@@ -22,7 +22,7 @@ spec:
             - name: RABBIT_PASSWORD
               value: {{ .Values.listener.env.password }}
             - name: PORT
-              value: {{ .Values.listener.env.PORT }}
+              value: {{ .Values.listener.env.port }}
             - name: QUEUE
               value: {{ .Values.listener.env.queue}}
             - name: WORKLOAD

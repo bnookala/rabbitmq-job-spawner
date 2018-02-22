@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: rabbitmq-listener
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rabbitmq-listener
+  template:
+    metadata:
+      labels:
+        app: rabbitmq-listener
+    spec:
+      containers:
+      - name: listener
+        image: bnookala/rabbitmq-listener
+        imagePullPolicy: Always
+        env:
+            - name: RABBIT_URL
+              value: foolish-puffin-rabbitmq.default.svc.cluster.local
+            - name: RABBIT_PASSWORD
+              value: password
+            - name: PORT
+              value: "5672"
+            - name: QUEUE
+              value: workqueue
+            - name: KUBERNETES
+              value: "TRUE"

@@ -1,0 +1,97 @@
+{
+    "kind": "Job",
+    "apiVersion": "batch/v1",
+    "metadata": {
+        "generateName": "noop-job-",
+        "creationTimestamp": null,
+        "labels": {
+            "parent": "rabbitmq-listener"
+        }
+    },
+    "spec": {
+        "parallelism": 1,
+        "completions": 1,
+        "backoffLimit": 3,
+        "template": {
+            "metadata": {
+                "creationTimestamp": null
+            },
+            "spec": {
+                "volumes": [
+                    {
+                        "name": "input",
+                        "emptyDir": {}
+                    },
+                    {
+                        "name": "output",
+                        "emptyDir": {}
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "noop",
+                        "image": "rbagby/noop",
+                        "env": [
+                            {
+                                "name": "INPUT_FOLDER",
+                                "value": "/var/input"
+                            },
+                            {
+                                "name": "OUTPUT_FOLDER",
+                                "value": "/var/output"
+                            }
+                        ],
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "name": "input",
+                                "mountPath": "/var/input"
+                            },
+                            {
+                                "name": "output",
+                                "mountPath": "/var/output"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "imagePullPolicy": "Always"
+                    },
+                    {
+                        "name": "dataporter",
+                        "image": "rbagby/dataporter",
+                        "env": [
+                            {
+                                "name": "INPUT_FOLDER",
+                                "value": "/var/input"
+                            },
+                            {
+                                "name": "OUTPUT_FOLDER",
+                                "value": "/var/output"
+                            }
+                        ],
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "name": "input",
+                                "mountPath": "/var/input"
+                            },
+                            {
+                                "name": "output",
+                                "mountPath": "/var/output"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "imagePullPolicy": "Always"
+                    }
+                ],
+                "restartPolicy": "Never",
+                "terminationGracePeriodSeconds": 30,
+                "dnsPolicy": "ClusterFirst",
+                "securityContext": {},
+                "schedulerName": "default-scheduler"
+            }
+        }
+    },
+    "status": {}
+}

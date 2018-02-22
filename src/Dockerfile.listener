@@ -1,0 +1,4 @@
+FROM jfloff/alpine-python:3.4-onbuild
+ADD . /app
+WORKDIR /app
+ENTRYPOINT python /app/src/listener.py

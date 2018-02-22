@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: "noop-job-"
+  labels:
+    parent: rabbitmq-listener
+spec:
+  template:
+    spec:
+      containers:
+      - name: noop
+        image: rbagby/noop
+        env:
+        - name: INPUT_FOLDER
+          value: "/var/input"
+        - name: OUTPUT_FOLDER
+          value: "/var/output"
+        volumeMounts:
+        - name: input
+          mountPath: /var/input
+        - name: output
+          mountPath: /var/output
+      - name: dataporter
+        image: rbagby/dataporter
+        env:
+        - name: INPUT_FOLDER
+          value: "/var/input"
+        - name: OUTPUT_FOLDER
+          value: "/var/output"
+        volumeMounts:
+        - name: input
+          mountPath: /var/input
+        - name: output
+          mountPath: /var/output
+      restartPolicy: Never
+      volumes:
+      - name: input
+        emptyDir: {}
+      - name: output
+        emptyDir: {}
+  backoffLimit: 3

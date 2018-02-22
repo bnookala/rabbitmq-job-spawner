@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Spawns Jobs on Kubernetes via RabbitMQ
+name: rabbitmq-job-spawner
+version: 0.1.0

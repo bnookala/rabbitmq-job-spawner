@@ -2,7 +2,7 @@
     "kind": "Job",
     "apiVersion": "batch/v1",
     "metadata": {
-        "generateName": "noop-job-",
+        "generateName": "workload-",
         "creationTimestamp": null,
         "labels": {
             "parent": "rabbitmq-listener"

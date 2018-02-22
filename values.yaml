@@ -1,0 +1,14 @@
+# Default values for rabbitmq-job-spawner, modify as you'd like.
+
+listener:
+  replicaCount: 1
+  image:
+    repository: bnookala/rabbitmq-listener
+    pullPolicy: Always
+
+  env:
+    rabbitUrl: "foolish-puffin-rabbitmq.default.svc.cluster.local"
+    password: "password"
+    port: "5672"
+    queue: "workqueue"
+    workload: "workload.json"

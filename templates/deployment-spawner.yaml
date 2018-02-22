@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "..fullname" . }}
+spec:
+  replicas: {{ .Values.listener.replicaCount }}
+  selector:
+    matchLabels:
+      app: rabbitmq-listener
+  template:
+    metadata:
+      labels:
+        app: {{ template "..name" . }}
+    spec:
+      containers:
+        - name: listener
+          image: "{{ .Values.listener.image.repository }}"
+          imagePullPolicy: {{ .Values.listener.image.pullPolicy }}
+          env:
+            - name: RABBIT_URL
+              value: {{ .Values.listener.env.rabbitUrl }}
+            - name: RABBIT_PASSWORD
+              value: {{ .Values.listener.env.password }}
+            - name: PORT
+              value: {{ .Values.listener.env.PORT }}
+            - name: QUEUE
+              value: {{ .Values.listener.env.queue}}
+            - name: WORKLOAD
+              value: {{.Values.listener.env.workload }}
+            - name: KUBERNETES
+              value: "TRUE"

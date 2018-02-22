@@ -1,0 +1,6 @@
+Deployed rabbitmq-job-spwner!
+
+Rabbit URL: {{- .Values.listener.env.rabbitUrl }}
+Rabbit Port: {{- .Values.listener.env.port }}
+Queue: {{- .Values.listener.env.queue }}
+Workload: {{- .Values.listener.env.workload }}

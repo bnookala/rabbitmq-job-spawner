@@ -28,4 +28,4 @@ spec:
             - name: KUBERNETES
               value: "TRUE"
             - name: WORKLOAD
-              value: "workload.json"
+              value: "encoder.json"

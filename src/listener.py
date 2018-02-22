@@ -5,6 +5,7 @@ import time
 import os
 import json
 import pika
+import string
 
 import pykube
 
@@ -72,26 +73,72 @@ class Listener(object):
             print(body)
             return
 
-        # example… workload (fix this later)
-        encoding_type = message_obj.get('encoding_type')
-        file_name = message_obj.get('file_name')
-        file_loc = message_obj.get('file_loc')
+        # example workload.
+        input_blob_loc = message_obj.get('input_blob_loc')
+        output_blob_loc = message_obj.get('output_blob_loc')
+        output_file_name = message_obj.get('output_file_name')
 
-        self.create_job_with_message(encoding_type, file_name, file_loc)
+        self.create_job_with_message(
+            input_blob_loc,
+            output_blob_loc,
+            output_file_name
+        )
 
         # todo: confirm where we should actually do this.
         self.channel.basic_ack(delivery_tag=method.delivery_tag)
 
-    def create_job_with_message(self, file_name, file_loc, encoding_type):
-        # todo: set the arguments as environment variables on the workload…
-
+    def create_job_with_message(
+        self,
+        input_blob_loc,
+        output_blob_loc,
+        output_file_name
+    ):
         spec_file = os.getcwd() + '/workloads/' + os.environ.get('WORKLOAD')
 
         with open(spec_file, 'r') as spec:
             lines = spec.read()
+
+        self.inject_env(
+            input_blob_loc,
+            output_blob_loc,
+            output_file_name,
+            lines
+        )
+
+        try:
             json_spec = json.loads(lines)
+        except Exception:
+            print("failed to read json spec")
+            return
 
         pykube.Job(self.api, json_spec).create()
+
+    def inject_env(
+        self,
+        input_blob_loc,
+        output_blob_loc,
+        output_file_name,
+        lines_spec
+    ):
+        string.replace(
+            lines_spec,
+            "TBD_IN_BLOB_LOC",
+            input_blob_loc
+        )
+
+        string.replace(
+            lines_spec,
+            "TBD_OUT_BLOB_LOC",
+            output_blob_loc
+        )
+
+        string.replace(
+            lines_spec,
+            "TBD_FILE_NAME",
+            output_file_name
+        )
+
+        return lines_spec
 
     def start_consume(self):
         self.channel.basic_consume(

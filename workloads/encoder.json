@@ -1,0 +1,97 @@
+{
+    "kind": "Job",
+    "apiVersion": "batch/v1",
+    "metadata": {
+        "generateName": "encoder-",
+        "creationTimestamp": null,
+        "labels": {
+            "parent": "rabbitmq-listener"
+        }
+    },
+    "spec": {
+        "parallelism": 1,
+        "completions": 1,
+        "backoffLimit": 3,
+        "template": {
+            "metadata": {
+                "creationTimestamp": null
+            },
+            "spec": {
+                "volumes": [
+                    {
+                        "name": "var",
+                        "emptyDir": {}
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "noop",
+                        "image": "rbagby/noop",
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "name": "var",
+                                "mountPath": "/var"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "imagePullPolicy": "Always"
+                    },
+                    {
+                        "name": "dataporter",
+                        "image": "rbagby/dataporter",
+                        "env": [
+                            {
+                                "name": "ACCOUNT_NAME",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "blobsecret",
+                                        "key": "user"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "ACCOUNT_TOKEN",
+                                "valueFrom": {
+                                    "secretKeyRef": {
+                                        "name": "blobsecret",
+                                        "key": "token"
+                                    }
+                                }
+                            },
+                            {
+                                "name": "INPUT_BLOB_LOCATION",
+                                "value": "TBD"
+                            },
+                            {
+                                "name": "OUTPUT_BLOB_LOCATION",
+                                "value": "TBD"
+                            },
+                            {
+                                "name": "OUTPUT_FILE_NAME",
+                                "value": "TBD"
+                            }
+                        ],
+                        "resources": {},
+                        "volumeMounts": [
+                            {
+                                "name": "var",
+                                "mountPath": "/var"
+                            }
+                        ],
+                        "terminationMessagePath": "/dev/termination-log",
+                        "terminationMessagePolicy": "File",
+                        "imagePullPolicy": "Always"
+                    }
+                ],
+                "restartPolicy": "Never",
+                "terminationGracePeriodSeconds": 30,
+                "dnsPolicy": "ClusterFirst",
+                "securityContext": {},
+                "schedulerName": "default-scheduler"
+            }
+        }
+    },
+    "status": {}
+}

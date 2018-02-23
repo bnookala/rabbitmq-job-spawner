@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: "encoder-"
+  labels:
+    parent: rabbitmq-listener
+spec:
+  template:
+    spec:
+      containers:
+      - name: noop
+        image: rbagby/noop
+        volumeMounts:
+        - name: var
+          mountPath: /var
+      - name: dataporter
+        image: rbagby/dataporter
+        env:
+        - name: ACCOUNT_NAME
+          valueFrom:
+            secretKeyRef:
+              name: blobsecret
+              key: user
+        - name: ACCOUNT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: blobsecret
+              key: token
+        - name: INPUT_BLOB_LOCATION
+          value: "TBD"
+        - name: OUTPUT_BLOB_LOCATION
+          value: "TBD"
+        - name: OUTPUT_FILE_NAME
+          value: "TBD"
+        volumeMounts:
+        - name: var
+          mountPath: /var
+      restartPolicy: Never
+      volumes:
+      - name: var
+        emptyDir: {}
+  backoffLimit: 3

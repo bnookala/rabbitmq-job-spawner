@@ -12,7 +12,7 @@ A proof of concept RabbitMQ based kubernetes job spawner.
 4. (optional, for locally testing) `pip install -r requirements.txt`
 5. `./build-docker-images.sh` (will also try to push to docker hub…)
 6. `kubectl apply -f src/listener.yaml` (important: make sure the blob storage secrets are in place!)
-7. submit some rabbitmq jobs. use `producer.py` to submit them.
+7. submit some rabbitmq jobs. use `producer.py` to submit them ie. `python producer.py`
 8. watch as your cluster spins up Job workloads as defined by `workloads/encoder.json`!
 
 

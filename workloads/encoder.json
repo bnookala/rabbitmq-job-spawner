@@ -52,7 +52,7 @@
                                 }
                             },
                             {
-                                "name": "ACCOUNT_TOKEN",
+                                "name": "ACCOUNT_KEY",
                                 "valueFrom": {
                                     "secretKeyRef": {
                                         "name": "blobsecret",

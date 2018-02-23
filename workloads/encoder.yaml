@@ -21,11 +21,11 @@ spec:
             secretKeyRef:
               name: blobsecret
               key: user
-        - name: ACCOUNT_TOKEN
+        - name: ACCOUNT_KEY
           valueFrom:
             secretKeyRef:
               name: blobsecret
-              key: token
+              key: key
         - name: INPUT_BLOB_LOCATION
           value: "TBD"
         - name: OUTPUT_BLOB_LOCATION

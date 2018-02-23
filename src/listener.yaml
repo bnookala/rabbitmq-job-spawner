@@ -18,7 +18,7 @@ spec:
         imagePullPolicy: Always
         env:
             - name: RABBIT_URL
-              value: foolish-puffin-rabbitmq.default.svc.cluster.local
+              value: 104.40.75.96
             - name: RABBIT_PASSWORD
               value: password
             - name: PORT

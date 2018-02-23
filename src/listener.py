@@ -5,7 +5,7 @@ import time
 import os
 import json
 import pika
-import string
+
 
 import pykube
 
@@ -98,7 +98,7 @@ class Listener(object):
         with open(spec_file, 'r') as spec:
             lines = spec.read()
 
-        self.inject_env(
+        templated = self.inject_env(
             input_blob_loc,
             output_blob_loc,
             output_file_name,
@@ -106,7 +106,7 @@ class Listener(object):
         )
 
         try:
-            json_spec = json.loads(lines)
+            json_spec = json.loads(templated)
         except Exception:
             print("failed to read json spec")
             return
@@ -120,25 +120,12 @@ class Listener(object):
         output_file_name,
         lines_spec
     ):
-        string.replace(
-            lines_spec,
-            "TBD_IN_BLOB_LOC",
-            input_blob_loc
-        )
 
-        string.replace(
-            lines_spec,
-            "TBD_OUT_BLOB_LOC",
-            output_blob_loc
-        )
+        iblob_replaced = lines_spec.replace('$INPUT_BLOB_LOCATION', input_blob_loc)
+        oblob_replaced = iblob_replaced.replace('$OUTPUT_BLOB_LOCATION', output_blob_loc)
+        fn_replaced = oblob_replaced.replace('$OUTPUT_FILE_NAME', output_file_name)
 
-        string.replace(
-            lines_spec,
-            "TBD_FILE_NAME",
-            output_file_name
-        )
-
-        return lines_spec
+        return fn_replaced
 
     def start_consume(self):
         self.channel.basic_consume(

@@ -62,15 +62,15 @@
                             },
                             {
                                 "name": "INPUT_BLOB_LOCATION",
-                                "value": "TBD"
+                                "value": "$INPUT_BLOB_LOCATION"
                             },
                             {
                                 "name": "OUTPUT_BLOB_LOCATION",
-                                "value": "TBD"
+                                "value": "$OUTPUT_BLOB_LOCATION"
                             },
                             {
                                 "name": "OUTPUT_FILE_NAME",
-                                "value": "TBD"
+                                "value": "$OUTPUT_FILE_NAME"
                             }
                         ],
                         "resources": {},
